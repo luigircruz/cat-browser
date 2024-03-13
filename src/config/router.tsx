@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     element: <NotFound />,
   },
   {
-    path: "/cat/:catId",
+    path: "cat/:catId",
     element: <CatDetails />,
   },
 ]);
