@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Cat } from "../types/cat";
-import { getCatDetail } from "../services/breeds";
+import { Cat } from "../../types/cat";
+import { getCatDetail } from "../../services/breeds";
 import { Button, Card } from "react-bootstrap";
 
 export default function CatDetails() {

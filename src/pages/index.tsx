@@ -61,7 +61,7 @@ export default function HomePage() {
                         loading="lazy"
                       />
                       <Card.Body>
-                        <Button as="a" href={`/${cat.id}`}>
+                        <Button as="a" href={`/cat/${cat.id}`}>
                           View details
                         </Button>
                       </Card.Body>
