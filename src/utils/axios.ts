@@ -7,7 +7,7 @@ const axios = Axios.create({
   headers: {
     "X-Requested-With": "XMLHttpRequest",
     "X-Client-Platform": "Web",
-    "x-api-key": import.meta.env.REACT_APP_CAT_API_KEY,
+    "x-api-key": import.meta.env.VITE_REACT_APP_CAT_API_KEY,
   },
   timeout: 60000,
 });
