@@ -12,7 +12,7 @@ import { CatBreedImage } from "../types/cat-breed-image";
 export default function HomePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [cats, setCats] = useState<CatBreedImage[]>([]);
+  const [, setCats] = useState<CatBreedImage[]>([]);
   const [selectedBreed, setSelectedBreed] = useState(
     searchParams.get("breed") ?? ""
   );
