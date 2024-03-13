@@ -1,3 +1,4 @@
+import { Cat } from "../types/cat";
 import { CatBreed } from "../types/cat-breed";
 import axios from "../utils/axios";
 
@@ -7,6 +8,17 @@ export async function getBreeds() {
     const breeds = response.data as CatBreed[];
 
     return { breeds };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getCatDetail({ params }: { params: { catId: string } }) {
+  try {
+    const response = await axios.get(`/images/${params.catId}`);
+    const catDetail = response.data as Cat;
+
+    return { catDetail };
   } catch (error) {
     console.error(error);
   }
@@ -32,8 +44,4 @@ export async function getBreedImage(
   return axios.get(
     `/images/search?page=${page}&limit=${limit}&breed_id=${breedId}`
   );
-}
-
-export async function getCatDetail(catId: string) {
-  return axios.get(`/images/${catId}`);
 }

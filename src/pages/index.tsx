@@ -1,99 +1,73 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button, Col, Container, Row, Stack } from "react-bootstrap";
 import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormSelect,
-  Row,
-  Stack,
-} from "react-bootstrap";
-import { useLoaderData } from "react-router-dom";
-import { getBreedImage, getBreeds } from "../services/breeds";
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import CatBreedList from "../components/compositions/cat-breed-list";
+import CatBreedsSelector from "../components/compositions/cat-breeds-selector";
 import { CatBreedImage } from "../types/cat-breed-image";
 
 export default function HomePage() {
-  const data = useLoaderData() as Awaited<ReturnType<typeof getBreeds>>;
-  const [selectedBreed, setSelectedBreed] = useState("");
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [cats, setCats] = useState<CatBreedImage[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBreed, setSelectedBreed] = useState(
+    searchParams.get("breed") ?? ""
+  );
+  const [isLastPage, setIsLastPage] = useState(false);
+  const [page, setPage] = useState(Number(searchParams.get("page") ?? 1));
 
-  useEffect(() => {
-    if (selectedBreed) {
-      getBreedImage(selectedBreed)
-        .then((res) => setCats(res.data))
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
-  }, [selectedBreed]);
+  async function onBreedSelectChange(breedId: string) {
+    setSelectedBreed(breedId);
+    setIsLastPage(false);
+  }
 
   return (
-    <section aria-label="home-page">
+    <section aria-label="home-page" className="Home">
       <Container>
         <Stack gap={3}>
           <h1>Cat Browser</h1>
           <Row>
-            <Col xs={12}>
-              <FormSelect
-                aria-label="Cat breeds"
-                onChange={(e) => setSelectedBreed(e.currentTarget.value)}
-              >
-                <option value="">Select breed</option>
-                {data?.breeds.map((breed) => (
-                  <option key={breed.id} value={breed.id}>
-                    {breed.name}
-                  </option>
-                ))}
-              </FormSelect>
+            <Col md={3} sm={6} xs={12}>
+              <CatBreedsSelector
+                onBreedSelectChange={onBreedSelectChange}
+                selectedBreed={selectedBreed}
+              />
             </Col>
           </Row>
           <Row>
             {selectedBreed ? (
-              <>
-                {cats.map((cat) => (
-                  <Col md={3} sm={6} xs>
-                    <Card>
-                      <Card.Img
-                        variant="top"
-                        src={cat.url}
-                        alt="Cat breed"
-                        loading="lazy"
-                      />
-                      <Card.Body>
-                        <Button as="a" href={`/cat/${cat.id}`}>
-                          View details
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </>
+              <CatBreedList setCats={setCats} />
             ) : (
-              <div>No cat selected</div>
+              <div>No cats available</div>
             )}
           </Row>
-          {selectedBreed && (
+          {!isLastPage && selectedBreed && (
             <Row>
               <Col xs={12}>
                 <Button
                   type="button"
                   variant="success"
                   onClick={async () => {
-                    getBreedImage(selectedBreed, currentPage + 1)
-                      .then((res) =>
-                        setCats((prevState) => {
-                          if (prevState === res.data) {
-                            return prevState;
-                          } else {
-                            return [...prevState, res.data];
-                          }
-                        })
-                      )
-                      .catch(function (error) {
-                        console.log(error);
+                    try {
+                      setPage((prevPage) => prevPage + 1);
+
+                      const queryParams = createSearchParams({
+                        breed: selectedBreed,
+                        page: String(page + 1),
+                        limit: "10",
+                      }).toString();
+
+                      navigate({
+                        pathname: "/",
+                        search: queryParams,
                       });
-                    setCurrentPage((prevState) => prevState++);
+                    } catch (error) {
+                      console.error("Error fetching data:", error);
+                      // Handle error (e.g., show an error message)
+                    }
                   }}
                 >
                   Load more
