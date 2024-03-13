@@ -24,8 +24,14 @@ export async function searchBreeds(query: string) {
   return axios.get(`/breeds/search?q=${query}&attach_image=1`);
 }
 
-export async function getBreedImage(breedId: string) {
-  return axios.get(`/images/search?page=1&limit=10&breed_id=${breedId}`);
+export async function getBreedImage(
+  breedId: string,
+  page: number = 1,
+  limit: number = 10
+) {
+  return axios.get(
+    `/images/search?page=${page}&limit=${limit}&breed_id=${breedId}`
+  );
 }
 
 export async function getCatDetail(catId: string) {
