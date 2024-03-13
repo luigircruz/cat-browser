@@ -1,5 +1,5 @@
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import useSWR, { SWRConfiguration, SWRResponse } from "swr";
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import axios from "./axios";
 
 export type GetRequest = AxiosRequestConfig | null;

@@ -1,3 +1,8 @@
+import CatBreedList from "@/components/compositions/cat-breed-list";
+import CatBreedsSelector from "@/components/compositions/cat-breeds-selector";
+import { useCatImagesByBreedContext } from "@/contexts/images-by-breed.context";
+import { CatBreedImage } from "@/types/cat-breed-image";
+import { isDeepEqual } from "@/utils/equal";
 import { useState } from "react";
 import { Button, Col, Container, Row, Stack } from "react-bootstrap";
 import {
@@ -5,18 +10,13 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import CatBreedList from "../components/compositions/cat-breed-list";
-import CatBreedsSelector from "../components/compositions/cat-breeds-selector";
-import { useCatImagesByBreedContext } from "../contexts/images-by-breed.context";
-import { CatBreedImage } from "../types/cat-breed-image";
-import { isDeepEqual } from "../utils/equal";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [cats, setCats] = useState<CatBreedImage[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string>(
-    searchParams.get("breed") as string
+    searchParams.get("breed") ?? ""
   );
   const [isLastPage, setIsLastPage] = useState(false);
   const [page, setPage] = useState(Number(searchParams.get("page") ?? 1));

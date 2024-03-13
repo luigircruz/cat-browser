@@ -1,6 +1,6 @@
+import useGetCatDetails from "@/services/useGetCatDetails";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import useGetCatDetails from "../../services/useGetCatDetails";
 import { toast } from "sonner";
 
 export default function CatDetails() {

@@ -1,10 +1,10 @@
-import { Card, Col } from "react-bootstrap";
-import { CatBreedImage } from "../../../types/cat-breed-image";
-import ButtonLink from "../../shared/button";
-import useGetImagesByBreed from "../../../services/useGetImagesByBreed";
-import { useSearchParams } from "react-router-dom";
+import ButtonLink from "@/components/shared/button";
+import { useCatImagesByBreedContext } from "@/contexts/images-by-breed.context";
+import useGetImagesByBreed from "@/services/useGetImagesByBreed";
+import { CatBreedImage } from "@/types/cat-breed-image";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useCatImagesByBreedContext } from "../../../contexts/images-by-breed.context";
+import { Card, Col } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
 
 export default function CatBreedList({
   setCats,
@@ -13,8 +13,7 @@ export default function CatBreedList({
 }) {
   const [searchParams] = useSearchParams();
   const { data } = useGetImagesByBreed(searchParams);
-  const { catImagesByBreedData, setCatImagesByBreedData } =
-    useCatImagesByBreedContext();
+  const { setCatImagesByBreedData } = useCatImagesByBreedContext();
 
   useEffect(() => {
     if (data) {
@@ -22,8 +21,6 @@ export default function CatBreedList({
       setCatImagesByBreedData(data);
     }
   }, [data, setCats, setCatImagesByBreedData]);
-
-  console.log({ catImagesByBreedData });
 
   return (
     <>

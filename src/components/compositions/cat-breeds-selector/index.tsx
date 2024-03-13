@@ -1,7 +1,7 @@
+import useGetBreeds from "@/services/useGetBreeds";
+import { useEffect, useState } from "react";
 import { FormSelect } from "react-bootstrap";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import useGetBreeds from "../../../services/useGetBreeds";
-import { useEffect, useState } from "react";
 
 export default function CatBreedsSelector({
   selectedBreed,

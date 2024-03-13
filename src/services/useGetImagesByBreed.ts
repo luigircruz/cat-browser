@@ -1,5 +1,5 @@
-import { CatBreedImage } from "../types/cat-breed-image";
-import useRequest from "../utils/useRequest";
+import { CatBreedImage } from "@/types/cat-breed-image";
+import useRequest from "@/utils/useRequest";
 
 export default function useGetImagesByBreed(searchParams: URLSearchParams) {
   const breed = searchParams.get("breed");
