@@ -1,6 +1,7 @@
 import { FormSelect } from "react-bootstrap";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import useGetBreeds from "../../../services/useGetBreeds";
+import { useEffect, useState } from "react";
 
 export default function CatBreedsSelector({
   selectedBreed,
@@ -11,11 +12,16 @@ export default function CatBreedsSelector({
 }) {
   const navigate = useNavigate();
   const { data: catBreeds, isValidating } = useGetBreeds();
+  const [breed, setBreed] = useState(selectedBreed);
+
+  useEffect(() => {
+    setBreed(selectedBreed);
+  }, [selectedBreed]);
 
   return (
     <FormSelect
       aria-label="Cat breeds"
-      defaultValue={selectedBreed}
+      defaultValue={breed}
       onChange={(e) => {
         onBreedSelectChange(e.currentTarget.value);
 

@@ -7,21 +7,50 @@ import {
 } from "react-router-dom";
 import CatBreedList from "../components/compositions/cat-breed-list";
 import CatBreedsSelector from "../components/compositions/cat-breeds-selector";
+import { useCatImagesByBreedContext } from "../contexts/images-by-breed.context";
 import { CatBreedImage } from "../types/cat-breed-image";
+import { isDeepEqual } from "../utils/equal";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [, setCats] = useState<CatBreedImage[]>([]);
-  const [selectedBreed, setSelectedBreed] = useState(
-    searchParams.get("breed") ?? ""
+  const [cats, setCats] = useState<CatBreedImage[]>([]);
+  const [selectedBreed, setSelectedBreed] = useState<string>(
+    searchParams.get("breed") as string
   );
   const [isLastPage, setIsLastPage] = useState(false);
   const [page, setPage] = useState(Number(searchParams.get("page") ?? 1));
+  const { catImagesByBreedData, setCatImagesByBreedData } =
+    useCatImagesByBreedContext();
 
   async function onBreedSelectChange(breedId: string) {
     setSelectedBreed(breedId);
     setIsLastPage(false);
+  }
+
+  function handleOnLoadMoreClick(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
+    e.preventDefault();
+    setPage((prevPage) => prevPage + 1);
+
+    const queryParams = createSearchParams({
+      breed: selectedBreed,
+      page: String(page + 1),
+      limit: "10",
+    }).toString();
+
+    navigate({
+      pathname: "/",
+      search: queryParams,
+    });
+
+    if (isDeepEqual(cats, catImagesByBreedData)) {
+      setIsLastPage(true);
+      return;
+    } else {
+      setCatImagesByBreedData((prevState) => [...prevState, ...cats]);
+    }
   }
 
   return (
@@ -50,25 +79,7 @@ export default function HomePage() {
                 <Button
                   type="button"
                   variant="success"
-                  onClick={async () => {
-                    try {
-                      setPage((prevPage) => prevPage + 1);
-
-                      const queryParams = createSearchParams({
-                        breed: selectedBreed,
-                        page: String(page + 1),
-                        limit: "10",
-                      }).toString();
-
-                      navigate({
-                        pathname: "/",
-                        search: queryParams,
-                      });
-                    } catch (error) {
-                      console.error("Error fetching data:", error);
-                      // Handle error (e.g., show an error message)
-                    }
-                  }}
+                  onClick={handleOnLoadMoreClick}
                 >
                   Load more
                 </Button>

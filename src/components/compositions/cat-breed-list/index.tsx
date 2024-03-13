@@ -4,6 +4,7 @@ import ButtonLink from "../../shared/button";
 import useGetImagesByBreed from "../../../services/useGetImagesByBreed";
 import { useSearchParams } from "react-router-dom";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { useCatImagesByBreedContext } from "../../../contexts/images-by-breed.context";
 
 export default function CatBreedList({
   setCats,
@@ -12,12 +13,17 @@ export default function CatBreedList({
 }) {
   const [searchParams] = useSearchParams();
   const { data } = useGetImagesByBreed(searchParams);
+  const { catImagesByBreedData, setCatImagesByBreedData } =
+    useCatImagesByBreedContext();
 
   useEffect(() => {
     if (data) {
       setCats(data);
+      setCatImagesByBreedData(data);
     }
-  }, [data, setCats]);
+  }, [data, setCats, setCatImagesByBreedData]);
+
+  console.log({ catImagesByBreedData });
 
   return (
     <>
