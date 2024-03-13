@@ -26,12 +26,12 @@ export default function CatDetails() {
       <Card.Img variant="top" src={catDetail?.url} />
       <Card.Body>
         {catDetail?.breeds.map((breed) => (
-          <>
+          <div key={breed.id}>
             <h1>{breed.name}</h1>
             <h5>Origin: {breed.origin}</h5>
             <h6>{breed.temperament}</h6>
             <p>{breed.description}</p>
-          </>
+          </div>
         ))}
       </Card.Body>
     </Card>
