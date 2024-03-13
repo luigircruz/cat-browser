@@ -16,6 +16,7 @@ export default function HomePage() {
   const data = useLoaderData() as Awaited<ReturnType<typeof getBreeds>>;
   const [selectedBreed, setSelectedBreed] = useState("");
   const [cats, setCats] = useState<CatBreedImage[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (selectedBreed) {
@@ -72,13 +73,34 @@ export default function HomePage() {
               <div>No cat selected</div>
             )}
           </Row>
-          <Row>
-            <Col xs={12}>
-              <Button type="button" variant="success" disabled>
-                Load more
-              </Button>
-            </Col>
-          </Row>
+          {selectedBreed && (
+            <Row>
+              <Col xs={12}>
+                <Button
+                  type="button"
+                  variant="success"
+                  onClick={async () => {
+                    getBreedImage(selectedBreed, currentPage + 1)
+                      .then((res) =>
+                        setCats((prevState) => {
+                          if (prevState === res.data) {
+                            return prevState;
+                          } else {
+                            return [...prevState, res.data];
+                          }
+                        })
+                      )
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                    setCurrentPage((prevState) => prevState++);
+                  }}
+                >
+                  Load more
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Stack>
       </Container>
     </section>
