@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages";
-import CatDetails from "../pages/cat/cat-details";
+import CatDetails from "../pages/cat-details";
 import NotFound from "../pages/not-found";
 import { getBreeds } from "../services/breeds";
 
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     element: <NotFound />,
   },
   {
-    path: "/cat/:catId",
+    path: "/:catId",
     element: <CatDetails />,
   },
 ]);
